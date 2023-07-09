@@ -1,21 +1,23 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {logOut} from 'features/appSlice';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'https://taxity-staging-api.onrender.com/api/v1/agent/',
-  timeout: 1000,
   prepareHeaders: (headers, {getState}) => {
-    const token = getState().app.token;
+    const token = getState().app?.token || '';
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
   },
-  //   timeout: 2000
 });
 
 const extendedBaseQuery = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
+  // console.log('result...', result);
   if (result.error && result.error.status === 401) {
+    api.dispatch(logOut());
     // try to get a new token
+    console.log(args);
     const refreshResult = await baseQuery('/refreshToken', api, extraOptions);
     if (refreshResult.data) {
       // store the new token

@@ -11,12 +11,20 @@ export const Api = apiSlice.injectEndpoints({
       }),
     }),
 
-    fetchAllDrivers: builder.query({
-      query: body => ({
-        url: API_ROUTE.fetchDrivers,
+    // fetchAllDrivers: builder.query({
+    //   query: () => ({
+    //     url: API_ROUTE.fetchDrivers,
+    //     method: method.GET,
+    //   }),
+    // }),
+
+    getAllDrivers: builder.query({
+      query: params => ({
+        url: `${API_ROUTE.fetchDrivers}?search=${params?.debouncedValue}&page=${params?.listPage}&limit=${params?.limit}`,
+        method: method.GET,
       }),
     }),
   }),
 });
 
-export const {useLoginMutation, useFetchAllDriversQuery} = Api;
+export const {useLoginMutation, useGetAllDriversQuery} = Api;

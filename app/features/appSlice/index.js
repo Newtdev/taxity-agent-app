@@ -24,12 +24,10 @@ export const appSlice = createSlice({
       // state.systemAdmin.role = action.payload?.systemAdmin.role;
     },
 
-    logOut: state => {
-      //   state.systemAdmin.role = null;
-      //   state.systemAdmin.firstName = '';
-      //   state.systemAdmin.lastName = '';
-      //   state.token.accessToken = null;
-      //   localStorage.removeItem(KEYS.USER_INFO);
+    logOut: (state, action) => {
+      state.token = null;
+      state.refreshToken = null;
+      state.user = null;
     },
   },
   extraReducers: builder => {

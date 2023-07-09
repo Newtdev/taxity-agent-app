@@ -6,25 +6,72 @@ import {
   TouchableOpacity,
   RefreshControl,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import Icon, {Icons} from 'components/Icon';
 import {COLORS} from 'constant/Data';
-import {useFetchAllDriversQuery} from 'api';
+import {useFetchAllDriversQuery, useGetAllDriversQuery} from 'api';
 import FullPageLoader from 'components/FullPageLoader';
+import {useDispatch} from 'react-redux';
+import {logOut} from 'features/appSlice';
+
+const useDebounce = value => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timeOutID = setTimeout(() => {
+      setDebouncedValue(value);
+    }, 3000);
+    return () => clearTimeout(timeOutID);
+  }, [value]);
+
+  return {debouncedValue};
+};
 
 export default function History() {
   const [value, setValue] = useState('');
-  const [listConfig, setListConfig] = useState({page: 1});
+  const {debouncedValue} = useDebounce(value);
+  const [listPage, setListPage] = useState(1);
+  const [fetchPagnatedData, setFetchPaginatedData] = useState(false);
 
-  const fetchDriverQueryResult = useFetchAllDriversQuery();
+  const dispatch = useDispatch();
+  const fetchDriverQueryResult = useGetAllDriversQuery(
+    {debouncedValue, listPage, limit: listPage * 10},
+    {
+      refetchOnReconnect: true,
+    },
+  );
 
-  console.log(fetchDriverQueryResult);
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
   const onRefresh = React.useCallback(() => {
     fetchDriverQueryResult.refetch();
   }, [fetchDriverQueryResult]);
+
+  const normalizedDriversData = useMemo(() => {
+    const data = fetchDriverQueryResult?.currentData;
+
+    return {
+      drivers: data?.drivers?.data,
+      total: data?.total,
+      today: data?.driversCreatedTodayCount,
+    };
+  }, [fetchDriverQueryResult]);
+  // useEffect(() => {
+  //   dispatch(logOut());
+  // }, []);
+  const RenderFooter = () => {
+    try {
+      if (fetchPagnatedData) {
+        return <ActivityIndicator />;
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -34,13 +81,13 @@ export default function History() {
           <View className="h-36 rounded-2xl flex flex-row justify-between overflow-hidden bg-primary">
             <RecordComp
               name="Total"
-              value={fetchDriverQueryResult?.total || 0}
+              value={normalizedDriversData?.total || 0}
             />
 
             <View className="h-[85%] my-auto rounded-lg bg-white w-0.5 " />
             <RecordComp
               name="Today"
-              value={fetchDriverQueryResult?.driversCreatedTodayCount || 0}
+              value={normalizedDriversData?.driversCreatedTodayCount || 0}
             />
           </View>
 
@@ -54,27 +101,34 @@ export default function History() {
           <View className="mt-6">
             <FlatList
               showsVerticalScrollIndicator={false}
-              centerContent
               alwaysBounceVertical
               contentInset={{bottom: 10, top: 6}}
-              keyboardDismissMode="none"
+              keyboardDismissMode="on-drag"
               refreshControl={
                 <RefreshControl
                   refreshing={fetchDriverQueryResult?.isFetching}
                   onRefresh={onRefresh}
                 />
               }
-              className=" h-[50%] mb-6"
-              data={fetchDriverQueryResult?.data}
-              renderItem={({data}) => <DriverList data={data} />}
-              keyExtractor={id => `${id}`}
-              onEndReached={e => console.log(e)}
+              className="h-[50%] mb-6"
+              data={normalizedDriversData?.drivers}
+              refreshing={fetchPagnatedData}
+              renderItem={data => <DriverList data={data} />}
+              keyExtractor={({id}) => `${id}`}
+              onEndReachedThreshold={0}
+              onEndReached={e => {
+                console.log(e.distanceFromEnd);
+                if (e.distanceFromEnd === 0) {
+                  setFetchPaginatedData(true);
+                  setListPage(prev => prev + 1);
+                }
+              }}
+              disableIntervalMomentum={true}
               ListEmptyComponent={<Text>Empty</Text>}
+              ListFooterComponent={RenderFooter}
             />
           </View>
         </View>
-
-        <Text>History</Text>
       </View>
     </ScreenWrapper>
   );
@@ -120,7 +174,8 @@ const SearchInput = ({
 };
 
 // DRIVER LIST COMPONENTS
-const DriverList = () => {
+const DriverList = ({data}) => {
+  const item = data?.item;
   return (
     <TouchableOpacity className="h-20 mt-2 bg-lightGreen rounded-2xl flex flex-row overflow-hidden">
       <View className=" basis-14 border-r border-white flex justify-center items-center">
@@ -133,9 +188,9 @@ const DriverList = () => {
       </View>
       <View className=" basis-[57%] flex justify-evenly py-4 px-2">
         <Text className="font-bold text-base break-words text-black">
-          Brad Johnson
+          {`${item?.firstName} ${item?.lastName}`}
         </Text>
-        <Text className="text-sm text-black">Mazda 360 GT.</Text>
+        <Text className="text-xs text-black">{`${item?.meta?.carBrand} ${item?.meta?.carModel} ${item?.meta?.carPlateNumber}`}</Text>
       </View>
       <View className=" basis-[40%] flex justify-center px-2">
         <Text className="text-xs text-black">09 : 34 AM </Text>
