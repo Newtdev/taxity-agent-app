@@ -71,7 +71,7 @@ export default function Login() {
   //   console.log(loginResult);
   async function loginRequest(values) {
     try {
-      const result = await login(values).unwrap();
+      await login(values).unwrap();
       //   formik.resetForm();
       //   console.log(result);
     } catch (error) {
