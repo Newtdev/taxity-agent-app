@@ -37,7 +37,7 @@ export const Input = ({
           {...props}
         />
         <IconButton
-          password={name === 'password'}
+          password={name === 'password' || name === 'confirmPassword'}
           onPress={() => setVisible(prevState => !prevState)}
           iconName={visible ? 'eye-outline' : 'ios-eye-off-outline'}
           size={20}

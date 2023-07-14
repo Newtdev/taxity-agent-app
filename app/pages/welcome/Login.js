@@ -23,19 +23,7 @@ import {showMessage} from 'react-native-flash-message';
 import {createAction} from '@reduxjs/toolkit';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginDetails} from 'features/appSlice';
-
-function getFormikFieldProps(formik, name) {
-  const fieldProps = formik.getFieldProps(name);
-  return {
-    id: name,
-    name,
-    value: fieldProps?.value || '',
-    onChangeText: formik.handleChange(`${name}`),
-    onBlur: formik.handleBlur(`${name}`),
-    error: !!formik.errors[name] && !!formik.touched[name],
-    errorMessage: formik.errors[name],
-  };
-}
+import {getFormikFieldProps} from 'utils';
 
 /***
  * export function getTextFieldFormikProps(formik, key) {

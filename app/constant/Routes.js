@@ -14,5 +14,5 @@ export const APP_ROUTE = {
   login: 'login',
   history: 'Home',
   profile: 'Profile',
-  registration: 'Add',
+  registration: 'Registration',
 };

@@ -35,7 +35,12 @@ const Icon = ({type, name, color, size = 24, style}) => {
   return (
     <>
       {type && name && (
-        <Tag name={name} size={size || fontSize} color={color} style={style} />
+        <Tag
+          name={name}
+          size={size || fontSize}
+          color={color}
+          className={style}
+        />
       )}
     </>
   );

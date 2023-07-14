@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import Icon, {Icons} from 'components/Icon';
+import {COLORS} from 'constant/Data';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 export function AppNavigation({state, descriptors, navigation}) {
@@ -18,7 +19,6 @@ export function AppNavigation({state, descriptors, navigation}) {
         const isFocused = state.index === index;
 
         const onPress = () => {
-          console.log(route.key);
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -38,6 +38,8 @@ export function AppNavigation({state, descriptors, navigation}) {
           });
         };
 
+        console.log(label);
+
         return (
           <TouchableOpacity
             key={route.key}
@@ -51,7 +53,12 @@ export function AppNavigation({state, descriptors, navigation}) {
             <View
               className="flex flex-row items-center gap-x-1 px-2 py-1 rounded-full"
               style={{backgroundColor: isFocused ? '#fff' : 'transparent'}}>
-              <Icon type={Icons.MaterialCommunityIcons} name="home" />
+              {/* <Icon
+                type={Icons.AntDesign}
+                name={label.toLowerCase()}
+                color={!isFocused ? COLORS.white : '#111'}
+              /> */}
+
               <Text
                 style={{
                   color: isFocused ? '#222' : 'transparent',

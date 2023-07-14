@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {logOut} from 'features/appSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://taxity-staging-api.onrender.com/api/v1/agent/',
+  baseUrl: 'https://taxity-api-staging.up.railway.app/api/v1/agent/',
   prepareHeaders: (headers, {getState}) => {
     const token = getState().app?.token || '';
     if (token) {

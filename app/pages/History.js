@@ -7,6 +7,7 @@ import {
   RefreshControl,
   FlatList,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
@@ -16,6 +17,8 @@ import {useFetchAllDriversQuery, useGetAllDriversQuery} from 'api';
 import FullPageLoader from 'components/FullPageLoader';
 import {useDispatch} from 'react-redux';
 import {logOut} from 'features/appSlice';
+import Ridges from 'assets/img/Ridges.png';
+import {APP_ROUTE} from 'constant/Routes';
 
 const useDebounce = value => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -30,7 +33,7 @@ const useDebounce = value => {
   return {debouncedValue};
 };
 
-export default function History() {
+export default function History({navigation}) {
   const [value, setValue] = useState('');
   const {debouncedValue} = useDebounce(value);
   const [listPage, setListPage] = useState(1);
@@ -43,6 +46,8 @@ export default function History() {
       refetchOnReconnect: true,
     },
   );
+
+  console.log(fetchDriverQueryResult);
 
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
   const onRefresh = React.useCallback(() => {
@@ -58,12 +63,13 @@ export default function History() {
       today: data?.driversCreatedTodayCount,
     };
   }, [fetchDriverQueryResult]);
+
   // useEffect(() => {
   //   dispatch(logOut());
   // }, []);
   const RenderFooter = () => {
     try {
-      if (fetchPagnatedData) {
+      if (!fetchPagnatedData) {
         return <ActivityIndicator />;
       } else {
         return;
@@ -78,18 +84,20 @@ export default function History() {
       <View className="h-full">
         {fetchDriverQueryResult.isLoading ? <FullPageLoader /> : null}
         <View className="py-4 mt-6 px-3 h-full">
-          <View className="h-36 rounded-2xl flex flex-row justify-between overflow-hidden bg-primary">
-            <RecordComp
-              name="Total"
-              value={normalizedDriversData?.total || 0}
-            />
+          <ImageBackground source={Ridges} resizeMode="contain">
+            <View className="h-36 rounded-2xl flex flex-row justify-between overflow-hidden bg-primary">
+              <RecordComp
+                name="Total"
+                value={normalizedDriversData?.total || 0}
+              />
 
-            <View className="h-[85%] my-auto rounded-lg bg-white w-0.5 " />
-            <RecordComp
-              name="Today"
-              value={normalizedDriversData?.driversCreatedTodayCount || 0}
-            />
-          </View>
+              <View className="h-[85%] my-auto rounded-lg bg-white w-0.5 " />
+              <RecordComp
+                name="Today"
+                value={normalizedDriversData?.driversCreatedTodayCount || 0}
+              />
+            </View>
+          </ImageBackground>
 
           <View className="mt-4">
             <SearchInput
@@ -98,7 +106,7 @@ export default function History() {
               value={value}
             />
           </View>
-          <View className="mt-6">
+          <View className="mt-6 relative">
             <FlatList
               showsVerticalScrollIndicator={false}
               alwaysBounceVertical
@@ -120,13 +128,25 @@ export default function History() {
                 console.log(e.distanceFromEnd);
                 if (e.distanceFromEnd === 0) {
                   setFetchPaginatedData(true);
-                  setListPage(prev => prev + 1);
+                  // setListPage(prev => prev + 1);
                 }
               }}
               disableIntervalMomentum={true}
               ListEmptyComponent={<Text>Empty</Text>}
               ListFooterComponent={RenderFooter}
             />
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate(APP_ROUTE.registration)}
+              className="h-14 w-14 bottom-0 rounded-full  absolute right-0 bg-primary flex flex-row justify-between items-center">
+              <Icon
+                type={Icons.AntDesign}
+                name="plus"
+                size={24}
+                style="mx-auto"
+                color={COLORS.white}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
