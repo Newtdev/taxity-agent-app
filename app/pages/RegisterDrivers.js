@@ -2,25 +2,22 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import {Input} from 'components/Input';
 import {Button} from 'components/Button';
-import useUser from 'hooks/useUser';
 import {useFormik} from 'formik';
 import {getFormikFieldProps} from 'utils';
 import {RadioButton} from 'react-native-paper';
 import {COLORS} from 'constant/Data';
 import * as Yup from 'yup';
+import SelectDropdown from 'react-native-select-dropdown';
+import SelectInput from 'components/SelectInput';
 
 const registrationData = [
   {
@@ -58,8 +55,51 @@ const registrationData = [
     placeholder: 'Repeat password',
     inputMode: 'text',
   },
+
+  {
+    id: 6,
+    name: 'meta.carBrand',
+    label: 'Car brand',
+    placeholder: 'Enter your car brand name',
+    inputMode: 'text',
+  },
+  {
+    id: 7,
+    name: 'meta.carModel',
+    label: 'Car Modal',
+    placeholder: 'Enter your car model',
+    inputMode: 'text',
+  },
+  {
+    id: 8,
+    name: 'meta.carColor',
+    label: 'Car color',
+    placeholder: 'Enter your car color',
+    inputMode: 'text',
+  },
+  {
+    id: 9,
+    name: 'meta.carPlateNumber',
+    label: 'Car plate number',
+    placeholder: 'Enter your car plate number',
+    inputMode: 'text',
+  },
+  {
+    id: 10,
+    name: 'location.state',
+    label: 'State',
+    placeholder: 'Enter State',
+    inputMode: 'text',
+  },
+  {
+    id: 11,
+    name: 'meta.accounNumber',
+    label: 'Account number',
+    placeholder: 'Enter account name',
+  },
 ];
 
+// FORM VALIATION
 const validateDriversRegistration = [
   Yup.object({
     firstName: Yup.string().label('First name').required(),
@@ -68,11 +108,13 @@ const validateDriversRegistration = [
       .label('phone number')
       .length(11, 'invalid')
       .required(),
-    password: Yup.string().label('Password').required(),
-    confirmPassword: Yup.ref('password'),
+    password: Yup.string().label('Password').min(8).required(),
+    confirmPassword: Yup.string()
+      .label('confirm Password')
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required(),
   }),
   Yup.object({
-    oldPassword: Yup.string().label('Old password').required(),
     avatar: Yup.string().notRequired(),
     id: Yup.string().notRequired(),
     accountStatus: Yup.object({
@@ -82,26 +124,45 @@ const validateDriversRegistration = [
   }),
 ];
 
-export default function RegisterDrivers({navigation}) {
-  const [step, setStep] = useState(0);
-
-  const formik = useFormik({
-    initialValues: {
-      phoneNumber: '09036899428',
-      firstName: '',
-      lastName: '',
-      password: '',
-      confirmPassword: '',
-      gender: 'male',
-
-      // location: {
-      //   state: 'Abuja',
-      // },
-    },
-    validateOnBlur: true,
-    validateOnChange: true,
-    validationSchema: validateDriversRegistration[step],
-  });
+const states = [
+  'Abia',
+  'Adamawa',
+  'Akwa Ibom',
+  'Anambra',
+  'Bauchi',
+  'Bayelsa',
+  'Benue',
+  'Borno',
+  'Cross River',
+  'Delta',
+  'Ebonyi',
+  'Edo',
+  'Ekiti',
+  'Enugu',
+  'Gombe',
+  'Imo',
+  'Jigawa',
+  'Kaduna',
+  'Kano',
+  'Katsina',
+  'Kebbi',
+  'Kogi',
+  'Kwara',
+  'Lagos',
+  'Nasarawa',
+  'Niger',
+  'Ogun',
+  'Ondo',
+  'Osun',
+  'Oyo',
+  'Plateau',
+  'Rivers',
+  'Sokoto',
+  'Taraba',
+  'Yobe',
+  'Zamfara',
+];
+const StepOne = ({formik, step}) => {
   const genderData = [
     {
       value: 'male',
@@ -119,6 +180,154 @@ export default function RegisterDrivers({navigation}) {
       handleChange: () => formik.setFieldValue('gender', 'other'),
     },
   ];
+  if (step !== 0) {
+    return null;
+  }
+  return (
+    <View className="w-full h-[5rem] ">
+      {registrationData.slice(0, 5)?.map((v, i) => (
+        <View key={i}>
+          {i !== 3 && i !== 4 ? (
+            <Input
+              label={v.label}
+              placeholder={v.placeholder}
+              inputMode={v.inputMode}
+              keyboardType="number-pad"
+              {...getFormikFieldProps(formik, `${v.name}`)}
+            />
+          ) : (
+            <Input
+              label={v.label}
+              placeholder={v.placeholder}
+              inputMode="text"
+              {...getFormikFieldProps(formik, `${v.name}`)}
+            />
+          )}
+        </View>
+      ))}
+      <View className="flex flex-row justify-evenly items-center">
+        {genderData.map(v => (
+          <View className="w-13 flex flex-row items-center">
+            <RadioButton
+              uncheckedColor={COLORS.primary}
+              color={COLORS.primary}
+              value={v.value}
+              status={v.status}
+              onPress={v.handleChange}
+            />
+            <Text className="text-black text-base capitalize">{v.value}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const StepTwo = ({formik, step}) => {
+  if (step !== 1) {
+    return null;
+  }
+  return (
+    <View className="w-full h-[5rem] ">
+      {registrationData.slice(5, 9)?.map((v, i) => (
+        <View key={i}>
+          <Input
+            label={v.label}
+            placeholder={v.placeholder}
+            inputMode={v.inputMode}
+            keyboardType="number-pad"
+            {...getFormikFieldProps(formik, `${v.name}`)}
+          />
+        </View>
+      ))}
+
+      <SelectInput
+        data={states}
+        onSelect={(selectedItem, index) => {
+          formik.setFieldValue('location.state', selectedItem);
+        }}
+        defaultValue="Abuja"
+        label="Select state"
+      />
+    </View>
+  );
+};
+
+const StepThree = ({formik, step}) => {
+  if (step !== 2) {
+    return null;
+  }
+  return (
+    <View className="w-full h-[7rem]">
+      {registrationData.slice(10, 11)?.map((v, i) => (
+        <View key={i}>
+          <Input
+            label={v.label}
+            placeholder={v.placeholder}
+            inputMode={v.inputMode}
+            keyboardType="number-pad"
+            {...getFormikFieldProps(formik, `${v.name}`)}
+          />
+        </View>
+      ))}
+      <SelectInput
+        data={states}
+        onSelect={(selectedItem, index) => {
+          formik.setFieldValue('location.state', selectedItem);
+        }}
+        defaultValue="Abuja"
+        label="Select bank"
+      />
+    </View>
+  );
+};
+
+async function submitDrivers() {
+  console.log('hellow');
+}
+export default function RegisterDrivers({navigation}) {
+  const [step, setStep] = useState(0);
+
+  const formik = useFormik({
+    initialValues: {
+      phoneNumber: '09036899428',
+      firstName: 'Thomas',
+      lastName: 'Ejembi',
+      password: 'EJEMBIthomas61@',
+      confirmPassword: 'EJEMBIthomas61@',
+      gender: 'male',
+
+      location: {
+        state: 'Abuja',
+      },
+      meta: {
+        bankName: 'New Driver',
+        accountNumber: '2390363916',
+        driverLicenseNumber: '4390365819',
+        carBrand: 'Toyota',
+        carModel: 'Corola',
+        carColor: 'Black',
+        carPlateNumber: 'ABJ-AM-999C',
+      },
+    },
+    validateOnBlur: true,
+    validateOnChange: true,
+    validationSchema: validateDriversRegistration[step],
+    onSubmit: values => {
+      switch (step) {
+        case 0:
+          setStep(prevStep => prevStep + 1);
+          break;
+
+        case 1:
+          setStep(prevStep => prevStep + 1);
+          break;
+        default:
+          submitDrivers();
+      }
+    },
+  });
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -128,47 +337,25 @@ export default function RegisterDrivers({navigation}) {
           <ScrollView
             className="h-[100%] w-full"
             showsVerticalScrollIndicator={false}>
-            <View className="w-full h-[5rem] ">
-              {registrationData?.map((v, i) => {
-                return i !== 3 && i !== 4 ? (
-                  <Input
-                    label={v.label}
-                    placeholder={v.placeholder}
-                    inputMode={v.inputMode}
-                    keyboardType="number-pad"
-                    {...getFormikFieldProps(formik, `${v.name}`)}
-                  />
-                ) : (
-                  <Input
-                    label={v.label}
-                    placeholder={v.placeholder}
-                    inputMode="text"
-                    {...getFormikFieldProps(formik, `${v.name}`)}
-                  />
-                );
-              })}
-              <View className="flex flex-row justify-evenly items-center">
-                {genderData.map(v => (
-                  <View className="w-13 flex flex-row items-center">
-                    <RadioButton
-                      uncheckedColor={COLORS.primary}
-                      color={COLORS.primary}
-                      value={v.value}
-                      status={v.status}
-                      onPress={v.handleChange}
-                    />
-                    <Text className="text-black text-base capitalize">
-                      {v.value}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-
-              <View className="mt-6">
-                <Button name="Continue" />
-              </View>
-            </View>
+            <StepOne formik={formik} step={step} />
+            <StepTwo formik={formik} step={step} />
+            <StepThree formik={formik} step={step} />
           </ScrollView>
+          <View className="mt-5 flex justify-evenly">
+            <Button
+              name={step === 3 ? 'Next' : 'Submit'}
+              onSubmit={formik.handleSubmit}
+            />
+            {step > 0 ? (
+              <TouchableOpacity
+                className="bg-white border border-primary rounded-lg py-4 mt-3"
+                onPress={() => setStep(prevState => prevState - 1)}>
+                <Text className="text-center text-primary font-bold text-base">
+                  Back
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
         {/* </SafeAreaView> */}
       </ScreenWrapper>
