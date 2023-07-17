@@ -7,3 +7,8 @@ export const COLORS = {
 export const action = {
   REMEMBER: 'rememberMe',
 };
+
+export const RTKTAG = {
+  FETCH_LIST: 'FETCH_LIST',
+  CREATE_DRIVERS: 'CREATE_DRIVERS',
+};

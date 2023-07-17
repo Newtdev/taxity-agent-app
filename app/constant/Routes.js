@@ -1,6 +1,7 @@
 export const API_ROUTE = {
   login: 'login',
   fetchDrivers: 'registered-drivers',
+  createDrivers: 'create-driver',
 };
 
 export const method = {
@@ -15,4 +16,5 @@ export const APP_ROUTE = {
   history: 'Home',
   profile: 'Profile',
   registration: 'Registration',
+  drivers_details: 'drivers details',
 };

@@ -19,6 +19,7 @@ import {useDispatch} from 'react-redux';
 import {logOut} from 'features/appSlice';
 import Ridges from 'assets/img/Ridges.png';
 import {APP_ROUTE} from 'constant/Routes';
+import {useNavigation} from '@react-navigation/native';
 
 const useDebounce = value => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -47,8 +48,6 @@ export default function History({navigation}) {
     },
   );
 
-  console.log(fetchDriverQueryResult);
-
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
   const onRefresh = React.useCallback(() => {
     fetchDriverQueryResult.refetch();
@@ -64,9 +63,6 @@ export default function History({navigation}) {
     };
   }, [fetchDriverQueryResult]);
 
-  // useEffect(() => {
-  //   dispatch(logOut());
-  // }, []);
   const RenderFooter = () => {
     try {
       if (!fetchPagnatedData) {
@@ -94,7 +90,7 @@ export default function History({navigation}) {
               <View className="h-[85%] my-auto rounded-lg bg-white w-0.5 " />
               <RecordComp
                 name="Today"
-                value={normalizedDriversData?.driversCreatedTodayCount || 0}
+                value={normalizedDriversData?.today || 0}
               />
             </View>
           </ImageBackground>
@@ -195,9 +191,12 @@ const SearchInput = ({
 
 // DRIVER LIST COMPONENTS
 const DriverList = ({data}) => {
+  const navigation = useNavigation();
   const item = data?.item;
   return (
-    <TouchableOpacity className="h-20 mt-2 bg-lightGreen rounded-2xl flex flex-row overflow-hidden">
+    <TouchableOpacity
+      className="h-20 mt-2 bg-lightGreen rounded-2xl flex flex-row overflow-hidden"
+      onPress={() => navigation.navigate(APP_ROUTE.drivers_details, item)}>
       <View className=" basis-14 border-r border-white flex justify-center items-center">
         <Icon
           type={Icons.EvilIcons}

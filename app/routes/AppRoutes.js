@@ -8,6 +8,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppNavigation} from 'Navigation';
 import Icon, {Icons} from 'components/Icon';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import DriversDetails from 'pages/DriversDetails';
 
 const Tab = createBottomTabNavigator();
 const {Navigator, Screen} = createNativeStackNavigator();
@@ -44,6 +45,7 @@ export default function AppRoute() {
         component={Main}
       />
       <Screen name={APP_ROUTE.registration} component={RegisterDrivers} />
+      <Screen name={APP_ROUTE.drivers_details} component={DriversDetails} />
     </Navigator>
   );
 }

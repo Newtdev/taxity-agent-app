@@ -4,9 +4,9 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 export default function SelectInput({data, onSelect, defaultValue, label}) {
   return (
-    <View className="flex-1 h-12">
+    <View className="flex-1 h-full">
       <Text className="text-sm text-black mb-2">{label}</Text>
-      <View className="border border-gray rounded-lg">
+      <View className="h-12 border border-gray rounded-lg">
         <SelectDropdown
           defaultButtonText=""
           defaultValue={defaultValue}

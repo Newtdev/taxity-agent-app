@@ -10,3 +10,16 @@ export function getFormikFieldProps(formik, name) {
     errorMessage: formik.errors[name],
   };
 }
+
+export const InvalidateTag = (id, typeTag) => {
+  return [{type: typeTag, id}];
+};
+
+export function providesTagList(resultsWithIds, tagType) {
+  return resultsWithIds
+    ? [
+        {type: tagType, id: 'LIST'},
+        ...resultsWithIds?.map(({id}) => ({type: tagType, id})),
+      ]
+    : [{type: tagType, id: 'LIST'}];
+}

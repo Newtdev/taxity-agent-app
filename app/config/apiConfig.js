@@ -1,4 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {RTKTAG} from 'constant/Data';
 import {logOut} from 'features/appSlice';
 
 const baseQuery = fetchBaseQuery({
@@ -34,6 +35,7 @@ const extendedBaseQuery = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: 'taxity-agent',
   baseQuery: extendedBaseQuery,
+  tagTypes: [RTKTAG.CREATE_DRIVERS, RTKTAG.FETCH_LIST],
   endpoints: builder => ({}),
 });
 
