@@ -18,27 +18,26 @@ const keys = [
 export default function DriversDetails(props) {
   const dataArray = useMemo(() => {
     const driversData = props?.route?.params;
-    // const {
-    //   firstName,
-    //   lastName,
-    //   carName,
-    //   carBrand,
-    //   phoneNumber,
-    //   porfolio,
-    //   // kyc: {identificationImage},
-    // } = props?.route?.params;
+    const location = driversData?.location;
+    const meta = driversData?.meta;
+    console.log(driversData);
 
     return [
-      {name: 'First name', value: driversData?.firstName},
-      {name: 'last name', value: driversData?.lastName},
-      {name: 'Mobile number', value: driversData?.phoneNumber},
+      {name: 'State', value: location?.state},
+      {name: 'Bank name', value: meta?.bankName},
+      {name: 'Account number', value: meta?.accountNumber},
+      {name: 'Car brand', value: meta?.carBrand},
+      {name: 'Car model', value: meta?.carModel},
+      {name: 'Car color', value: meta?.carColor},
+      {name: 'Car plate Number', value: meta?.carPlateNumber},
+      {name: "Driver's license number", value: meta?.driverLicenseNumber},
     ];
   }, [props?.route?.params]);
 
   return (
     <ScreenWrapper backBtn={true} navigation={props.navigation}>
       <View className=" px-4">
-        <View className="w-full h-56 flex justify-between">
+        <View className="w-full h-56 flex justify-between mb-6">
           <Image
             source={{uri: props?.route?.params?.kyc?.identificationImage?.url}}
             loadingIndicatorSource={
@@ -60,15 +59,15 @@ export default function DriversDetails(props) {
           </View>
         </View>
         {dataArray?.map(v => (
-          <View className="flex flex-row justify-between py-3 mt-3">
-            <View className="flex flex-col basis-1/2">
+          <View className="flex flex-row justify-between">
+            <View className="flex flex-col basis-1/2 pl-4">
               <Text
                 // key={i + 1}
                 className="text-base font-bold text-darkgray text-left my-2 capitalize">
                 {v?.name}
               </Text>
             </View>
-            <View className="basis-1/2">
+            <View className="basis-1/2 pr-4">
               <Text className="text-base text-primary font-bold text-right">
                 {v?.value}
               </Text>
