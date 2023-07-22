@@ -338,7 +338,9 @@ const StepThree = ({formik, step}) => {
 
 const labels = ['Profile', 'Car info', 'Bank details'];
 
-export default function RegisterDrivers({navigation}) {
+export default function EditDriversInfo(props) {
+  //   const driversData = props?.route?.params;
+  console.log('drivers data', props?.route?.params);
   const [step, setStep] = useState(0);
   const [registerDrivers, registerDriverResult] = useRegisterDriverMutation();
 
@@ -404,7 +406,7 @@ export default function RegisterDrivers({navigation}) {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1}}>
-      <ScreenWrapper backBtn={true} navigation={navigation}>
+      <ScreenWrapper backBtn={true} navigation={props.navigation}>
         {registerDriverResult.isLoading ? <FullPageLoader /> : null}
         <View style={styles.inner}>
           <View className="mb-3">

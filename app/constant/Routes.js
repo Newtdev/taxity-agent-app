@@ -17,4 +17,5 @@ export const APP_ROUTE = {
   profile: 'Profile',
   registration: 'Registration',
   drivers_details: 'drivers details',
+  editDriverInfo: 'Edit drivers information',
 };

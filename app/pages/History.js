@@ -20,6 +20,7 @@ import {logOut} from 'features/appSlice';
 import Ridges from 'assets/img/Ridges.png';
 import {APP_ROUTE} from 'constant/Routes';
 import {useNavigation} from '@react-navigation/native';
+import {format} from 'date-fns';
 
 const useDebounce = value => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -47,8 +48,6 @@ export default function History({navigation}) {
       refetchOnReconnect: true,
     },
   );
-
-  console.log(fetchDriverQueryResult);
 
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
   const onRefresh = React.useCallback(() => {
@@ -214,8 +213,14 @@ const DriverList = ({data}) => {
         <Text className="text-xs text-black">{`${item?.meta?.carBrand} ${item?.meta?.carModel} ${item?.meta?.carPlateNumber}`}</Text>
       </View>
       <View className=" basis-[40%] flex justify-center px-2">
-        <Text className="text-xs text-black">09 : 34 AM </Text>
-        <Text className="text-xs text-black">03 -10-2023 </Text>
+        {/* Time */}
+        <Text className="text-xs text-black text-end">
+          {format(new Date(item?.createdAt), 'HH:mm:ss')}
+        </Text>
+        {/* Date */}
+        <Text className="text-xs text-black">
+          {format(new Date(item?.createdAt), 'MM/dd/yyyy')}
+        </Text>
       </View>
     </TouchableOpacity>
   );

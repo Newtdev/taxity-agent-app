@@ -6,6 +6,7 @@ import {useGetAllDriversQuery, useGetSingleDriverQuery} from 'api';
 import {string} from 'yup';
 import {splitByUpperCase} from 'utils';
 import {COLORS} from 'constant/Data';
+import {APP_ROUTE} from 'constant/Routes';
 
 const keys = [
   'First name',
@@ -16,11 +17,10 @@ const keys = [
   'Car name',
 ];
 export default function DriversDetails(props) {
+  const driversData = props?.route?.params;
   const dataArray = useMemo(() => {
-    const driversData = props?.route?.params;
     const location = driversData?.location;
     const meta = driversData?.meta;
-    console.log(driversData);
 
     return [
       {name: 'State', value: location?.state},
@@ -32,7 +32,7 @@ export default function DriversDetails(props) {
       {name: 'Car plate Number', value: meta?.carPlateNumber},
       {name: "Driver's license number", value: meta?.driverLicenseNumber},
     ];
-  }, [props?.route?.params]);
+  }, [driversData?.location, driversData?.meta]);
 
   return (
     <ScreenWrapper backBtn={true} navigation={props.navigation}>
@@ -55,15 +55,18 @@ export default function DriversDetails(props) {
             </Text>
           </View>
           <View className="mt-4">
-            <Button name="Edit" onPress={() => console.log('edit value')} />
+            <Button
+              name="Edit"
+              onSubmit={() =>
+                props.navigation.navigate(APP_ROUTE.editDriverInfo, driversData)
+              }
+            />
           </View>
         </View>
-        {dataArray?.map(v => (
-          <View className="flex flex-row justify-between">
+        {dataArray?.map((v, i) => (
+          <View key={i + 1} className="flex flex-row justify-between">
             <View className="flex flex-col basis-1/2 pl-4">
-              <Text
-                // key={i + 1}
-                className="text-base font-bold text-darkgray text-left my-2 capitalize">
+              <Text className="text-base font-bold text-darkgray text-left my-2 capitalize">
                 {v?.name}
               </Text>
             </View>
