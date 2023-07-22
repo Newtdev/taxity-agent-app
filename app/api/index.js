@@ -40,6 +40,16 @@ export const Api = apiSlice.injectEndpoints({
       invalidatesTags: result =>
         InvalidateTag(result?.drivers?.data, RTKTAG.CREATE_DRIVERS),
     }),
+
+    updateDriversInfo: builder.mutation({
+      query: values => ({
+        url: `${API_ROUTE.createDrivers}/${values?.id}`,
+        method: method.PATCH,
+        body: values,
+      }),
+      invalidatesTags: result =>
+        InvalidateTag(result?.drivers?.data, RTKTAG.CREATE_DRIVERS),
+    }),
   }),
 });
 
@@ -48,4 +58,5 @@ export const {
   useGetAllDriversQuery,
   useRegisterDriverMutation,
   useGetSingleDriverQuery,
+  useUpdateDriversInfoMutation,
 } = Api;

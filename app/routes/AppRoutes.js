@@ -17,7 +17,7 @@ const {Navigator, Screen} = createNativeStackNavigator();
 const Main = () => {
   return (
     <Tab.Navigator
-      initialRouteName={APP_ROUTE.history}
+      // initialRouteName={APP_ROUTE.history}
       // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => (
         <View className="w-[95%] my-2 mx-auto rounded-full py-4 bg-primary">

@@ -1,21 +1,10 @@
 import {View, Text, Image, ActivityIndicator} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import {Button} from 'components/Button';
-import {useGetAllDriversQuery, useGetSingleDriverQuery} from 'api';
-import {string} from 'yup';
-import {splitByUpperCase} from 'utils';
 import {COLORS} from 'constant/Data';
 import {APP_ROUTE} from 'constant/Routes';
 
-const keys = [
-  'First name',
-  'Last name',
-  'Gender',
-  'Phone number',
-  'Car brand',
-  'Car name',
-];
 export default function DriversDetails(props) {
   const driversData = props?.route?.params;
   const dataArray = useMemo(() => {
@@ -48,10 +37,10 @@ export default function DriversDetails(props) {
           />
           <View>
             <Text className="font-bold text-lg text-center text-primary">
-              {`${dataArray[0]?.value} ${dataArray[1]?.value}`}
+              {`${driversData?.firstName} ${driversData?.lastName}`}
             </Text>
             <Text className=" text-sm text-center text-black">
-              {dataArray[2]?.value}
+              {driversData?.phoneNumber}
             </Text>
           </View>
           <View className="mt-4">

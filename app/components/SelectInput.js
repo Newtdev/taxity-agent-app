@@ -2,13 +2,19 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-export default function SelectInput({data, onSelect, defaultValue, label}) {
+export default function SelectInput({
+  data,
+  onSelect,
+  defaultValue,
+  label,
+  defaultButtonText,
+}) {
   return (
     <View className="flex-1 h-full">
       <Text className="text-sm text-black mb-2">{label}</Text>
       <View className="h-12 border border-gray rounded-lg">
         <SelectDropdown
-          defaultButtonText=""
+          defaultButtonText={defaultButtonText}
           defaultValue={defaultValue}
           rowStyle={styles.rowStyle}
           buttonStyle={styles.button}

@@ -14,7 +14,7 @@ export const Input = ({
   const [focus, setFocus] = useState(false);
   const [visible, setVisible] = useState(true);
   const error = props.error;
-  //   console.log(props.errorMessage);
+
   return (
     <View>
       <Text className="text-sm text-black mb-1">{label}</Text>
@@ -32,6 +32,7 @@ export const Input = ({
             onFocus();
             setFocus(() => true);
           }}
+          value={props?.value}
           onBlur={() => setFocus(() => false)}
           secureTextEntry={
             (name === 'password' || name === 'confirmPassword') && visible
