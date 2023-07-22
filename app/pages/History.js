@@ -48,6 +48,8 @@ export default function History({navigation}) {
     },
   );
 
+  console.log(fetchDriverQueryResult);
+
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
   const onRefresh = React.useCallback(() => {
     fetchDriverQueryResult.refetch();

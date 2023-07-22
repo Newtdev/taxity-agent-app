@@ -216,16 +216,19 @@ const states = [
 const StepOne = ({formik, step}) => {
   const genderData = [
     {
+      id: 1,
       value: 'male',
       status: formik.values.gender === 'male' ? 'checked' : 'unchecked',
       handleChange: () => formik.setFieldValue('gender', 'male'),
     },
     {
+      id: 2,
       value: 'female',
       status: formik.values.gender === 'female' ? 'checked' : 'unchecked',
       handleChange: () => formik.setFieldValue('gender', 'female'),
     },
     {
+      id: 3,
       value: 'other',
       status: formik.values.gender === 'other' ? 'checked' : 'unchecked',
       handleChange: () => formik.setFieldValue('gender', 'other'),
@@ -237,7 +240,7 @@ const StepOne = ({formik, step}) => {
   return (
     <View className="w-full h-[5rem] ">
       {registrationData.slice(0, 5)?.map((v, i) => (
-        <View key={i}>
+        <View key={i + 1}>
           {i !== 3 && i !== 4 ? (
             <Input
               label={v.label}
@@ -258,7 +261,7 @@ const StepOne = ({formik, step}) => {
       ))}
       <View className="flex flex-row justify-evenly items-center">
         {genderData.map(v => (
-          <View className="w-13 flex flex-row items-center">
+          <View key={v.id} className="w-13 flex flex-row items-center">
             <RadioButton
               uncheckedColor={COLORS.primary}
               color={COLORS.primary}
@@ -281,7 +284,7 @@ const StepTwo = ({formik, step}) => {
   return (
     <View className="w-full h-[5rem] ">
       {registrationData?.slice(5, 9)?.map((v, i) => (
-        <View key={v.identificationNumber}>
+        <View key={i + 1}>
           <Input
             label={v.label}
             placeholder={v.placeholder}
@@ -309,9 +312,9 @@ const StepThree = ({formik, step}) => {
     return null;
   }
   return (
-    <View className="w-full h-[7rem]">
+    <View className="w-full h-[7rem] mt-6">
       {registrationData.slice(10, 11)?.map((v, i) => (
-        <View key={i}>
+        <View key={i + 1}>
           <Input
             label={v.label}
             placeholder={v.placeholder}
@@ -334,29 +337,6 @@ const StepThree = ({formik, step}) => {
 };
 
 const labels = ['Profile', 'Car info', 'Bank details'];
-const customStyles = {
-  stepIndicatorSize: 25,
-  currentStepIndicatorSize: 30,
-  separatorStrokeWidth: 2,
-  currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#002928',
-  stepStrokeWidth: 3,
-  stepStrokeFinishedColor: '#002928',
-  stepStrokeUnFinishedColor: '#002928',
-  separatorFinishedColor: '#002928',
-  separatorUnFinishedColor: '#002928',
-  stepIndicatorFinishedColor: '#002928',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
-  stepIndicatorLabelFontSize: 13,
-  currentStepIndicatorLabelFontSize: 13,
-  stepIndicatorLabelCurrentColor: '#002928',
-  stepIndicatorLabelFinishedColor: '#ffffff',
-  stepIndicatorLabelUnFinishedColor: '#002928',
-  labelColor: '#002928',
-  labelSize: 13,
-  currentStepLabelColor: '#002928',
-};
 
 export default function RegisterDrivers({navigation}) {
   const [step, setStep] = useState(0);
@@ -475,6 +455,30 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
+
+const customStyles = {
+  stepIndicatorSize: 25,
+  currentStepIndicatorSize: 30,
+  separatorStrokeWidth: 2,
+  currentStepStrokeWidth: 3,
+  stepStrokeCurrentColor: '#002928',
+  stepStrokeWidth: 3,
+  stepStrokeFinishedColor: '#002928',
+  stepStrokeUnFinishedColor: '#002928',
+  separatorFinishedColor: '#002928',
+  separatorUnFinishedColor: '#002928',
+  stepIndicatorFinishedColor: '#002928',
+  stepIndicatorUnFinishedColor: '#ffffff',
+  stepIndicatorCurrentColor: '#ffffff',
+  stepIndicatorLabelFontSize: 13,
+  currentStepIndicatorLabelFontSize: 13,
+  stepIndicatorLabelCurrentColor: '#002928',
+  stepIndicatorLabelFinishedColor: '#ffffff',
+  stepIndicatorLabelUnFinishedColor: '#002928',
+  labelColor: '#002928',
+  labelSize: 13,
+  currentStepLabelColor: '#002928',
+};
 
 //  <KeyboardAvoidingView
 //    behavior={Platform.OS === 'ios' ? 'padding' : null}

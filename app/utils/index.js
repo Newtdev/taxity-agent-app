@@ -23,3 +23,13 @@ export function providesTagList(resultsWithIds, tagType) {
       ]
     : [{type: tagType, id: 'LIST'}];
 }
+
+export function splitByUpperCase(str) {
+  const result = str
+    .trim()
+    .split(/(?=[A-Z])/)
+    .join(' ')
+    .trim();
+
+  return result;
+}

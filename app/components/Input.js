@@ -12,7 +12,7 @@ export const Input = ({
   ...props
 }) => {
   const [focus, setFocus] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const error = props.error;
   //   console.log(props.errorMessage);
   return (
@@ -33,7 +33,9 @@ export const Input = ({
             setFocus(() => true);
           }}
           onBlur={() => setFocus(() => false)}
-          secureTextEntry={visible}
+          secureTextEntry={
+            (name === 'password' || name === 'confirmPassword') && visible
+          }
           {...props}
         />
         <IconButton
