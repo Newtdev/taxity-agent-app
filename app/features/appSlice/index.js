@@ -37,6 +37,7 @@ export const appSlice = createSlice({
     builder.addMatcher(Api.endpoints.login.matchFulfilled, (state, action) => {
       state.token = action.payload?.token?.accessToken;
       state.refreshToken = action.payload?.token?.refreshToken;
+      console.log(action.payload.agent);
       state.user = action.payload?.agent;
     });
   },

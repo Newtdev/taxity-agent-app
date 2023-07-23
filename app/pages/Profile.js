@@ -1,53 +1,45 @@
-import {View, Text, Image, ActivityIndicator} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {useMemo} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import {Button} from 'components/Button';
 import {COLORS} from 'constant/Data';
 import {APP_ROUTE} from 'constant/Routes';
+import useUser from 'hooks/useUser';
+import Icon, {Icons} from 'components/Icon';
 
 export default function Profile(props) {
-  const driversData = props?.route?.params;
-  const dataArray = useMemo(() => {
-    const location = driversData?.location;
-    const meta = driversData?.meta;
+  const {user} = useUser();
 
+  const dataArray = useMemo(() => {
     return [
-      {name: 'State', value: location?.state},
-      {name: 'Bank name', value: meta?.bankName},
-      {name: 'Account number', value: meta?.accountNumber},
-      {name: 'Car brand', value: meta?.carBrand},
-      {name: 'Car model', value: meta?.carModel},
-      {name: 'Car color', value: meta?.carColor},
-      {name: 'Car plate Number', value: meta?.carPlateNumber},
-      {name: "Driver's license number", value: meta?.driverLicenseNumber},
+      {name: 'First name', value: user?.firstName},
+      {name: 'Last name', value: user?.lastName},
+      {name: 'Mobile number', value: user?.phoneNumber},
+      {name: 'Email', value: user?.email},
+      {name: 'Gender', value: user?.gender},
     ];
-  }, [driversData?.location, driversData?.meta]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ScreenWrapper backBtn={true} navigation={props.navigation}>
       <View className=" px-4">
-        <View className="w-full h-56 flex justify-between mb-6">
-          <Image
-            source={{uri: props?.route?.params?.kyc?.identificationImage?.url}}
-            loadingIndicatorSource={
-              <ActivityIndicator color={COLORS.primary} size="small" />
-            }
-            resizeMode="center"
-            className="h-20 w-20 self-center my-auto rounded-full"
-          />
-          <View>
-            <Text className="font-bold text-lg text-center text-primary">
-              {`${driversData?.firstName} ${driversData?.lastName}`}
-            </Text>
-            <Text className=" text-sm text-center text-black">
-              {driversData?.phoneNumber}
-            </Text>
+        <View className="w-full h-56 flex ">
+          <View className="p-6 w-34 mx-auto rounded-full bg-primary mb-6">
+            <Icon
+              type={Icons.Entypo}
+              color={COLORS.white}
+              name="user"
+              size={56}
+              style="mx-auto"
+            />
           </View>
-          <View className="mt-4">
+
+          <View className="">
             <Button
               name="Edit"
               onSubmit={() =>
-                props.navigation.navigate(APP_ROUTE.editDriverInfo, driversData)
+                props.navigation.navigate(APP_ROUTE.editDriverInfo)
               }
             />
           </View>
@@ -60,7 +52,7 @@ export default function Profile(props) {
               </Text>
             </View>
             <View className="basis-1/2 pr-4">
-              <Text className="text-base text-primary font-bold text-right">
+              <Text className="text-base capitalize text-primary font-bold text-right">
                 {v?.value}
               </Text>
             </View>

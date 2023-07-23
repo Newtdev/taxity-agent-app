@@ -344,10 +344,8 @@ export default function RegisterDrivers({navigation}) {
 
   async function submitDrivers(values) {
     try {
-      const response = await registerDrivers(values).unwrap();
-      console.log('response', response);
+      await registerDrivers(values).unwrap();
     } catch (error) {
-      console.log(error?.data?.message);
       showMessage({
         message: error?.data?.message,
         description: error?.data?.message,
@@ -357,24 +355,24 @@ export default function RegisterDrivers({navigation}) {
   }
   const formik = useFormik({
     initialValues: {
-      phoneNumber: '09036899428',
-      firstName: 'Thomas',
-      lastName: 'Ejembi',
-      password: 'EJEMBIthomas61@',
-      confirmPassword: 'EJEMBIthomas61@',
-      gender: 'male',
+      phoneNumber: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      confirmPassword: '',
+      gender: '',
 
       location: {
-        state: 'Abuja',
+        state: '',
       },
       meta: {
-        bankName: 'New Driver',
-        accountNumber: '2390363916',
+        bankName: '',
+        accountNumber: '',
         // driverLicenseNumber: '4390365819',
-        carBrand: 'Toyota',
-        carModel: 'Corola',
-        carColor: 'Black',
-        carPlateNumber: 'ABJ-AM-999C',
+        carBrand: '',
+        carModel: '',
+        carColor: '',
+        carPlateNumber: '',
       },
       kyc: {
         meansOfIdentification: 'driver_license',
