@@ -3,7 +3,6 @@ import {createReducer, createSlice} from '@reduxjs/toolkit';
 import {Api} from 'api';
 
 // import {setItem} from 'helpers/utils';
-import {rememberDetails} from 'pages/welcome/Login';
 
 // const rememberDetails = createReducer(action.REMEMBER);
 // console.log(rememberDetails);
@@ -31,9 +30,9 @@ export const appSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(rememberDetails, (state, action) => {
-      state.userDetails = action.payload;
-    });
+    // builder.addCase(rememberDetails, (state, action) => {
+    //   state.userDetails = action.payload;
+    // });
     builder.addMatcher(Api.endpoints.login.matchFulfilled, (state, action) => {
       state.token = action.payload?.token?.accessToken;
       state.refreshToken = action.payload?.token?.refreshToken;

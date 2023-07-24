@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   RefreshControl,
@@ -13,7 +12,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import Icon, {Icons} from 'components/Icon';
 import {COLORS} from 'constant/Data';
-import {useFetchAllDriversQuery, useGetAllDriversQuery} from 'api';
+import {useGetAllDriversQuery, useGetFetchMoreDriversQuery} from 'api';
 import FullPageLoader from 'components/FullPageLoader';
 import {useDispatch} from 'react-redux';
 import {logOut} from 'features/appSlice';
@@ -21,6 +20,7 @@ import Ridges from 'assets/img/Ridges.png';
 import {APP_ROUTE} from 'constant/Routes';
 import {useNavigation} from '@react-navigation/native';
 import {format} from 'date-fns';
+import {Button} from 'components/Button';
 
 const useDebounce = value => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -33,6 +33,21 @@ const useDebounce = value => {
   }, [value]);
 
   return {debouncedValue};
+};
+
+const EmptyList = ({data, fn}) => {
+  return (
+    <View className=" w-[60%] m-auto mt-24 flex justify-center items-center">
+      {data?.length < 1 || data === undefined ? (
+        <View>
+          <Text className="text-black font-bold text-base mb-4">
+            No data found
+          </Text>
+          <Button name="Reload" onSubmit={() => fn()} />
+        </View>
+      ) : null}
+    </View>
+  );
 };
 
 export default function History({navigation}) {
@@ -49,7 +64,10 @@ export default function History({navigation}) {
     },
   );
 
-  // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LIST
+  function resetRequest() {
+    setListPage(() => 1);
+  }
+  // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LISTd
   const onRefresh = React.useCallback(() => {
     fetchDriverQueryResult.refetch();
   }, [fetchDriverQueryResult]);
@@ -66,8 +84,8 @@ export default function History({navigation}) {
 
   const RenderFooter = () => {
     try {
-      if (!fetchPagnatedData) {
-        return <ActivityIndicator />;
+      if (fetchPagnatedData && fetchDriverQueryResult.isFetching) {
+        return <ActivityIndicator size="large" color={COLORS.primary} />;
       } else {
         return;
       }
@@ -103,7 +121,7 @@ export default function History({navigation}) {
               value={value}
             />
           </View>
-          <View className="mt-6 relative">
+          <View className="mt-6 relative ">
             <FlatList
               showsVerticalScrollIndicator={false}
               alwaysBounceVertical
@@ -115,27 +133,39 @@ export default function History({navigation}) {
                   onRefresh={onRefresh}
                 />
               }
-              className="h-[50%] mb-6"
+              className="h-[60%] mb-6"
+              contentContainerStyle={{
+                paddingBottom: 50,
+              }}
               data={normalizedDriversData?.drivers}
               refreshing={fetchPagnatedData}
               renderItem={data => <DriverList data={data} />}
               keyExtractor={({id}) => `${id}`}
-              onEndReachedThreshold={0}
+              onEndReachedThreshold={0.5}
               onEndReached={e => {
-                console.log(e.distanceFromEnd);
-                if (e.distanceFromEnd === 0) {
-                  setFetchPaginatedData(true);
-                  // setListPage(prev => prev + 1);
+                if (e.distanceFromEnd > 0) {
+                  setFetchPaginatedData(prev => !prev);
+
+                  setListPage(prev => prev + 1);
+                  console.log(listPage);
+                } else {
+                  setFetchPaginatedData(prev => !prev);
                 }
+                // setFetchPaginatedData(() => false);
               }}
               disableIntervalMomentum={true}
-              ListEmptyComponent={<Text>Empty</Text>}
-              ListFooterComponent={RenderFooter}
+              ListEmptyComponent={
+                <EmptyList
+                  data={fetchDriverQueryResult?.currentData?.drivers?.data}
+                  fn={resetRequest}
+                />
+              }
+              ListFooterComponent={<RenderFooter />}
             />
 
             <TouchableOpacity
               onPress={() => navigation.navigate(APP_ROUTE.registration)}
-              className="h-14 w-14 bottom-0 rounded-full  absolute right-0 bg-primary flex flex-row justify-between items-center">
+              className="h-14 w-14 bottom-0 rounded-full absolute right-0 bg-primary flex flex-row justify-between items-center">
               <Icon
                 type={Icons.AntDesign}
                 name="plus"
@@ -175,7 +205,7 @@ const SearchInput = ({
         focus ? 'border-primary' : 'border-gray'
       }`}>
       <TextInput
-        className="py-3 rounded-lg px-3 flex-1"
+        className="py-3 rounded-lg px-3 flex-1 text-black"
         placeholder={placeholder}
         inputMode="text"
         value={value}
@@ -203,7 +233,7 @@ const DriverList = ({data}) => {
           type={Icons.EvilIcons}
           name="user"
           color={COLORS.gray}
-          size={20}
+          size={40}
         />
       </View>
       <View className=" basis-[57%] flex justify-evenly py-4 px-2">

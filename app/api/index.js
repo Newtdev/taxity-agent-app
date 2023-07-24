@@ -15,7 +15,7 @@ export const Api = apiSlice.injectEndpoints({
 
     getAllDrivers: builder.query({
       query: params => ({
-        url: `${API_ROUTE.fetchDrivers}?search=${params?.debouncedValue}&page=${params?.listPage}&limit=${params?.limit}`,
+        url: `${API_ROUTE.fetchDrivers}?search=${params?.debouncedValue}&page=${params.listPage}limit=${params.limit}`,
         method: method.GET,
       }),
       providesTags: result =>

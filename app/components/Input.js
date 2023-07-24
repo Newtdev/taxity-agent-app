@@ -23,7 +23,7 @@ export const Input = ({
           error ? 'border-red-500' : focus ? 'border-primary' : 'border-gray'
         }`}>
         <TextInput
-          className="py-3 rounded-lg px-3 flex-1"
+          className="py-3 rounded-lg px-3 flex-1 text-black"
           id={`${name}`}
           placeholder={placeholder}
           inputMode={type}

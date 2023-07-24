@@ -7,6 +7,7 @@ import {APP_ROUTE} from 'constant/Routes';
 
 export default function DriversDetails(props) {
   const driversData = props?.route?.params;
+
   const dataArray = useMemo(() => {
     const location = driversData?.location;
     const meta = driversData?.meta;

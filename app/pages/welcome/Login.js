@@ -60,12 +60,13 @@ const authValidation = Yup.object({
 });
 
 // CREATE ACTION CREATOR TO SAVE USER DETAILS
-export const rememberDetails = createAction(action.REMEMBER);
+// export const rememberDetails = createAction(action.REMEMBER);
 
 export default function Login() {
-  const [save, setSave] = useState(false);
+  // const [save, setSave] = useState(false);
   const [login, loginResult] = useLoginMutation();
-  const dispatch = useDispatch();
+  console.log(loginResult?.error);
+  // const dispatch = useDispatch();
   //   const {password, phoneNumber} = useSelector(loginDetails);
 
   //   console.log(loginResult);
@@ -119,7 +120,7 @@ export default function Login() {
               inputMode="text"
               {...getFormikFieldProps(formik, 'password')}
             />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setSave(prevState => !prevState);
                 dispatch(rememberDetails(formik.values));
@@ -135,7 +136,7 @@ export default function Login() {
                 color={save ? COLORS.primary : COLORS.gray}
               />
               <Text className="text-primary text-sm">Remember me</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View className="mt-4">
               <Button
                 name="Login"

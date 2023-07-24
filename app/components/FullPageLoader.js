@@ -8,7 +8,7 @@ export default function FullPageLoader() {
       <View className="flex-1 items-center justify-center bg-[#000000cf]">
         <View className="p-6 bg-white rounded-2xl">
           <ActivityIndicator color={COLORS.primary} size="large" />
-          <Text className=" text-sm mt-2">Please wait</Text>
+          <Text className=" text-sm mt-2 text-black">Please wait</Text>
         </View>
       </View>
     </Modal>
