@@ -8,14 +8,12 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
 import Icon, {Icons} from 'components/Icon';
 import {COLORS} from 'constant/Data';
-import {useGetAllDriversQuery, useGetFetchMoreDriversQuery} from 'api';
+import {useGetAllDriversQuery} from 'api';
 import FullPageLoader from 'components/FullPageLoader';
-import {useDispatch} from 'react-redux';
-import {logOut} from 'features/appSlice';
 import Ridges from 'assets/img/Ridges.png';
 import {APP_ROUTE} from 'constant/Routes';
 import {useNavigation} from '@react-navigation/native';
@@ -53,19 +51,18 @@ const EmptyList = ({data, fn}) => {
 export default function History({navigation}) {
   const [value, setValue] = useState('');
   const {debouncedValue} = useDebounce(value);
-  const [listPage, setListPage] = useState(1);
+  const currentPage = useRef(1);
   const [fetchPagnatedData, setFetchPaginatedData] = useState(false);
 
-  const dispatch = useDispatch();
   const fetchDriverQueryResult = useGetAllDriversQuery(
-    {debouncedValue, listPage, limit: listPage * 10},
+    {debouncedValue, limit: currentPage * 10},
     {
       refetchOnReconnect: true,
     },
   );
 
   function resetRequest() {
-    setListPage(() => 1);
+    // setListPage(() => 1);
   }
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LISTd
   const onRefresh = React.useCallback(() => {
@@ -93,6 +90,11 @@ export default function History({navigation}) {
       console.log(error);
     }
   };
+
+  // FETCH MORE DETAILS
+  function fetchMoreDetails() {
+    console.log(currentPage.current + 1);
+  }
 
   return (
     <ScreenWrapper>
@@ -142,17 +144,7 @@ export default function History({navigation}) {
               renderItem={data => <DriverList data={data} />}
               keyExtractor={({id}) => `${id}`}
               onEndReachedThreshold={0.5}
-              onEndReached={e => {
-                if (e.distanceFromEnd > 0) {
-                  setFetchPaginatedData(prev => !prev);
-
-                  setListPage(prev => prev + 1);
-                  console.log(listPage);
-                } else {
-                  setFetchPaginatedData(prev => !prev);
-                }
-                // setFetchPaginatedData(() => false);
-              }}
+              onEndReached={fetchMoreDetails}
               disableIntervalMomentum={true}
               ListEmptyComponent={
                 <EmptyList
