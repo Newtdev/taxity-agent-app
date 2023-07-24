@@ -327,7 +327,7 @@ const StepThree = ({formik, step}) => {
       <SelectInput
         data={banks}
         onSelect={(selectedItem, index) => {
-          formik.setFieldValue('location.state', selectedItem);
+          formik.setFieldValue('meta.bankName', selectedItem);
         }}
         defaultValue="Abuja"
         label="Select bank"
@@ -397,7 +397,7 @@ export default function RegisterDrivers({navigation}) {
       }
     },
   });
-
+  console.log(formik.errors);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

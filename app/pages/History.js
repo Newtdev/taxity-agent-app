@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   ImageBackground,
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import ScreenWrapper from 'components/ScreenWrapper';
@@ -48,21 +49,27 @@ const EmptyList = ({data, fn}) => {
   );
 };
 
+function ShowPaginationLoader({driversData, currentPage}) {
+  if (currentPage.current * 10 < driversData?.totalData) {
+    return <ActivityIndicator size="large" color={COLORS.primary} />;
+  }
+}
 export default function History({navigation}) {
   const [value, setValue] = useState('');
   const {debouncedValue} = useDebounce(value);
   const currentPage = useRef(1);
+
   const [fetchPagnatedData, setFetchPaginatedData] = useState(false);
 
   const fetchDriverQueryResult = useGetAllDriversQuery(
-    {debouncedValue, limit: currentPage * 10},
+    {debouncedValue, limit: currentPage.current * 10},
     {
       refetchOnReconnect: true,
     },
   );
 
   function resetRequest() {
-    // setListPage(() => 1);
+    fetchDriverQueryResult.refetch();
   }
   // ON DRAG DOWN OF THE DRIVERS LIST REFRESH LISTd
   const onRefresh = React.useCallback(() => {
@@ -79,21 +86,17 @@ export default function History({navigation}) {
     };
   }, [fetchDriverQueryResult]);
 
-  const RenderFooter = () => {
-    try {
-      if (fetchPagnatedData && fetchDriverQueryResult.isFetching) {
-        return <ActivityIndicator size="large" color={COLORS.primary} />;
-      } else {
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // FETCH MORE DETAILS
-  function fetchMoreDetails() {
-    console.log(currentPage.current + 1);
+  function fetchMoreDetails(e) {
+    const driversData = fetchDriverQueryResult?.currentData?.drivers;
+
+    if (currentPage.current * 10 < driversData?.totalData) {
+      currentPage.current++;
+
+      fetchDriverQueryResult.refetch();
+      setFetchPaginatedData(prev => !prev);
+    }
+    // return;
   }
 
   return (
@@ -136,14 +139,12 @@ export default function History({navigation}) {
                 />
               }
               className="h-[60%] mb-6"
-              contentContainerStyle={{
-                paddingBottom: 50,
-              }}
+              contentContainerStyle={styles.container}
               data={normalizedDriversData?.drivers}
               refreshing={fetchPagnatedData}
               renderItem={data => <DriverList data={data} />}
               keyExtractor={({id}) => `${id}`}
-              onEndReachedThreshold={0.5}
+              onEndReachedThreshold={0.1}
               onEndReached={fetchMoreDetails}
               disableIntervalMomentum={true}
               ListEmptyComponent={
@@ -152,7 +153,12 @@ export default function History({navigation}) {
                   fn={resetRequest}
                 />
               }
-              ListFooterComponent={<RenderFooter />}
+              ListFooterComponent={
+                <ShowPaginationLoader
+                  driversData={ShowPaginationLoader}
+                  currentPage={currentPage}
+                />
+              }
             />
 
             <TouchableOpacity
@@ -247,3 +253,9 @@ const DriverList = ({data}) => {
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 50,
+  },
+});
