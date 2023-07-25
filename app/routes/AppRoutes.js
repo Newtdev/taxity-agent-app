@@ -32,7 +32,6 @@ const Main = () => {
       <Tab.Screen name={APP_ROUTE.history} component={History} />
 
       <Tab.Screen name={APP_ROUTE.profile} component={Profile} />
-      {/* <Tab.Screen name={APP_ROUTE.profile} component={Profile} /> */}
     </Tab.Navigator>
   );
 };
@@ -41,7 +40,7 @@ export default function AppRoute() {
   return (
     <Navigator screenOptions={{headerShown: false}}>
       <Screen
-        name={'Home'}
+        name="Main"
         options={{tabBarHideOnKeyboard: true}}
         component={Main}
       />

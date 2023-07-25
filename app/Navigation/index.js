@@ -53,11 +53,11 @@ export function AppNavigation({state, descriptors, navigation}) {
             <View
               className="flex flex-row items-center gap-x-1 px-2 py-1 rounded-full"
               style={{backgroundColor: isFocused ? '#fff' : 'transparent'}}>
-              {/* <Icon
+              <Icon
                 type={Icons.AntDesign}
                 name={label.toLowerCase()}
                 color={!isFocused ? COLORS.white : '#111'}
-              /> */}
+              />
 
               <Text
                 style={{

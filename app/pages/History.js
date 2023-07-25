@@ -34,7 +34,7 @@ const useDebounce = value => {
   return {debouncedValue};
 };
 
-const EmptyList = ({data, fn}) => {
+const EmptyList = ({data, fn, error}) => {
   return (
     <View className=" w-[60%] m-auto mt-24 flex justify-center items-center">
       {data?.length < 1 || data === undefined ? (
@@ -150,6 +150,7 @@ export default function History({navigation}) {
               ListEmptyComponent={
                 <EmptyList
                   data={fetchDriverQueryResult?.currentData?.drivers?.data}
+                  error={fetchDriverQueryResult?.error}
                   fn={resetRequest}
                 />
               }

@@ -63,18 +63,14 @@ const authValidation = Yup.object({
 // export const rememberDetails = createAction(action.REMEMBER);
 
 export default function Login() {
-  // const [save, setSave] = useState(false);
   const [login, loginResult] = useLoginMutation();
-  console.log(loginResult?.error);
+
   // const dispatch = useDispatch();
   //   const {password, phoneNumber} = useSelector(loginDetails);
 
-  //   console.log(loginResult);
   async function loginRequest(values) {
     try {
       await login(values).unwrap();
-      //   formik.resetForm();
-      //   console.log(result);
     } catch (error) {
       showMessage({
         message: 'Something went wrong!',
