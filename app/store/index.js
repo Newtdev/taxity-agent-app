@@ -4,8 +4,8 @@ import {persistStore} from 'redux-persist';
 import {combineReducers} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {apiSlice} from 'config/apiConfig';
 import {appSlice} from 'features/appSlice';
+import {apiSlice} from 'api';
 // import {AuthApiSlice} from 'apis/authApiSlice';
 
 const persistConfig = {

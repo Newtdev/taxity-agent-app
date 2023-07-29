@@ -21,6 +21,7 @@ import {useRegisterDriverMutation} from 'api';
 import FullPageLoader from 'components/FullPageLoader';
 import {showMessage} from 'react-native-flash-message';
 import StepIndicator from 'react-native-step-indicator';
+import SuccessModal from 'components/SuccessModal';
 
 const registrationData = [
   {
@@ -176,6 +177,7 @@ const validateDriversRegistration = [
 ];
 
 const states = [
+  'Abuja',
   'Abia',
   'Adamawa',
   'Akwa Ibom',
@@ -398,12 +400,15 @@ export default function RegisterDrivers({navigation}) {
     },
   });
   console.log(formik.errors);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1}}>
+      {registerDriverResult.isSuccess ? <SuccessModal /> : null}
       <ScreenWrapper backBtn={true} navigation={navigation}>
         {registerDriverResult.isLoading ? <FullPageLoader /> : null}
+
         <View style={styles.inner}>
           <View className="mb-3">
             <StepIndicator
@@ -414,7 +419,7 @@ export default function RegisterDrivers({navigation}) {
             />
           </View>
           <ScrollView
-            className="h-[100%]  w-full"
+            className="h-[100%] w-full"
             showsVerticalScrollIndicator={false}>
             <StepOne formik={formik} step={step} />
             <StepTwo formik={formik} step={step} />
@@ -436,7 +441,6 @@ export default function RegisterDrivers({navigation}) {
             ) : null}
           </View>
         </View>
-        {/* </SafeAreaView> */}
       </ScreenWrapper>
     </KeyboardAvoidingView>
   );

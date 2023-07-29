@@ -1,6 +1,5 @@
-import {View, Text} from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 import React from 'react';
-import ScreenWrapper from './ScreenWrapper';
 import Icon, {Icons} from './Icon';
 import {COLORS} from 'constant/Data';
 import {Button} from './Button';
@@ -10,8 +9,8 @@ import {APP_ROUTE} from 'constant/Routes';
 export default function SuccessModal() {
   const navigation = useNavigation();
   return (
-    <ScreenWrapper>
-      <View className=" h-full w-full ">
+    <SafeAreaView>
+      <View className="h-full w-full  ">
         <View className="flex justify-center items-center h-[80%] ">
           <Text className="font-bold text-2xl text-primary mb-6">
             Registration Successful
@@ -24,9 +23,12 @@ export default function SuccessModal() {
           />
         </View>
         <View className="w-full px-4 h-fit ">
-          <Button name="Done" onSubmit={() => navigation.push('home')} />
+          <Button
+            name="Done"
+            onSubmit={() => navigation.navigate(APP_ROUTE.history)}
+          />
         </View>
       </View>
-    </ScreenWrapper>
+    </SafeAreaView>
   );
 }

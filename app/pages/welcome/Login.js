@@ -65,6 +65,7 @@ const authValidation = Yup.object({
 export default function Login() {
   const [login, loginResult] = useLoginMutation();
 
+  console.log(loginResult);
   // const dispatch = useDispatch();
   //   const {password, phoneNumber} = useSelector(loginDetails);
 

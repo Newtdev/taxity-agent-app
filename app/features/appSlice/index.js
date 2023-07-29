@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import {createReducer, createSlice} from '@reduxjs/toolkit';
-import {Api} from 'api';
+import {createSlice} from '@reduxjs/toolkit';
+import {ApiRoute} from 'api';
 
 // import {setItem} from 'helpers/utils';
 
@@ -33,12 +33,15 @@ export const appSlice = createSlice({
     // builder.addCase(rememberDetails, (state, action) => {
     //   state.userDetails = action.payload;
     // });
-    builder.addMatcher(Api.endpoints.login.matchFulfilled, (state, action) => {
-      state.token = action.payload?.token?.accessToken;
-      state.refreshToken = action.payload?.token?.refreshToken;
-      console.log(action.payload.agent);
-      state.user = action.payload?.agent;
-    });
+    builder.addMatcher(
+      ApiRoute.endpoints.login.matchFulfilled,
+      (state, action) => {
+        state.token = action.payload?.token?.accessToken;
+        state.refreshToken = action.payload?.token?.refreshToken;
+        console.log(action.payload.agent);
+        state.user = action.payload?.agent;
+      },
+    );
   },
 });
 
