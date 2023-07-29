@@ -51,7 +51,7 @@ export function AppNavigation({state, descriptors, navigation}) {
             onLongPress={onLongPress}
             className="flex-1 items-center flex-row justify-center gapx-6 w-2">
             <View
-              className="flex flex-row items-center gap-x-1 px-2 py-1 rounded-full"
+              className="flex basis-[50%] flex-row items-center gap-x-1 px-2 py-1 rounded-full"
               style={{backgroundColor: isFocused ? '#fff' : 'transparent'}}>
               <Icon
                 type={Icons.AntDesign}
