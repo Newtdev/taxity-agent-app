@@ -78,7 +78,6 @@ export default function History({navigation}) {
 
   const normalizedDriversData = useMemo(() => {
     const data = fetchDriverQueryResult?.currentData;
-
     return {
       drivers: data?.drivers?.data,
       total: data?.total,
