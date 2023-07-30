@@ -30,7 +30,6 @@ const Main = () => {
         tabBarHideOnKeyboard: true,
       }}>
       <Tab.Screen name={APP_ROUTE.history} component={History} />
-
       <Tab.Screen name={APP_ROUTE.profile} component={Profile} />
     </Tab.Navigator>
   );

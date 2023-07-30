@@ -223,6 +223,7 @@ const SearchInput = ({
 const DriverList = ({data}) => {
   const navigation = useNavigation();
   const item = data?.item;
+
   return (
     <TouchableOpacity
       className="h-20 mt-2 bg-lightGreen rounded-2xl flex flex-row overflow-hidden"

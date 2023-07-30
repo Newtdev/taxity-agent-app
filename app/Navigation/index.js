@@ -37,9 +37,6 @@ export function AppNavigation({state, descriptors, navigation}) {
             target: route.key,
           });
         };
-
-        console.log(label);
-
         return (
           <TouchableOpacity
             key={route.key}

@@ -85,12 +85,16 @@ export default function EditDriversInfo(props) {
         ...values,
         id: driversData?.id,
       }).unwrap();
-      console.log('response', response);
-    } catch (error) {
-      console.log(error?.data);
+
       showMessage({
-        message: error?.data?.message,
-        description: error?.data?.message,
+        message: response?.status,
+        description: "Driver's information updated!",
+        type: 'success',
+      });
+    } catch (error) {
+      showMessage({
+        message: error?.message,
+        description: error?.message,
         type: 'danger',
       });
     }

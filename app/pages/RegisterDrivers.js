@@ -399,7 +399,6 @@ export default function RegisterDrivers({navigation}) {
       }
     },
   });
-  console.log(formik.errors);
 
   return (
     <KeyboardAvoidingView

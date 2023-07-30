@@ -84,7 +84,7 @@ export const ApiRoute = apiSlice.injectEndpoints({
 
     updateDriversInfo: builder.mutation({
       query: ({id, ...values}) => ({
-        url: `${API_ROUTE.fetchDrivers}/${values?.id}`,
+        url: `${API_ROUTE.fetchDrivers}/${id}`,
         method: method.PATCH,
         body: values,
       }),
